@@ -1,51 +1,52 @@
 services:
-  api:
-    build:
-      context: ./backend
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+  backend:
+    build: ./backend
     ports:
-      - "8000:8000"
-    env_file:
-      - ./backend/.env.example
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      MONGO_URI: mongodb://mongo:27017/frostsight
+      REDIS_URL: redis://redis:6379
+      DD_AGENT_HOST: datadog
+      DD_DOGSTATSD_PORT: 8125
+      NODE_ENV: development
     depends_on:
-      - redpanda
+      - mongo
+      - redis
+      - datadog
 
-  worker:
-    build:
-      context: ./backend
-    command: python -m app.worker
-    env_file:
-      - ./backend/.env.example
-    depends_on:
-      - redpanda
-
-  redpanda:
-    image: redpandadata/redpanda:latest
-    command:
-      - redpanda
-      - start
-      - --overprovisioned
-      - --smp
-      - "1"
-      - --memory
-      - 512M
-      - --reserve-memory
-      - 0M
-      - --node-id
-      - "0"
-      - --check=false
-      - --kafka-addr
-      - PLAINTEXT://0.0.0.0:9092
-      - --advertise-kafka-addr
-      - PLAINTEXT://redpanda:9092
+  frontend:
+    build: ./frontend
     ports:
-      - "9092:9092"
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:4000
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
 
   datadog:
     image: gcr.io/datadoghq/agent:latest
     environment:
-      - DD_API_KEY=${DATADOG_API_KEY:-}
-      - DD_SITE=datadoghq.com
-      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+      DD_API_KEY: ${DD_API_KEY:-replace_me}
+      DD_SITE: datadoghq.com
+      DD_DOGSTATSD_NON_LOCAL_TRAFFIC: "true"
+      DD_APM_ENABLED: "true"
+      DD_LOGS_ENABLED: "true"
     ports:
       - "8125:8125/udp"
+      - "8126:8126"
+
+volumes:
+  mongo-data:

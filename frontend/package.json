@@ -1,0 +1,19 @@
+{
+  "name": "frostsight-frontend",
+  "version": "1.0.0",
+  "description": "Vue and Three.js dashboard for FrostSight",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "axios": "^1.7.9",
+    "three": "^0.171.0",
+    "vite": "^6.0.5",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {}
+}

@@ -1,5 +1,6 @@
 # FrostSight
 
+<<<<<<< Updated upstream
 ## NOTICE
 
 This is the Back Up of this Project. All commit history and version control is not on this repository. This is just an artifact of the original repository. 
@@ -7,167 +8,200 @@ This is the Back Up of this Project. All commit history and version control is n
 ## Overview
 
 FrostSight is a SaaS style cloud security observability platform that ingests cloud audit events, processes suspicious activity signals, stores enriched records, and exposes operational metrics through Datadog dashboards.
+=======
+FrostSight is a reconstructed cloud cost intelligence platform that ingests billing exports, stores raw cloud spend data, exposes hybrid REST and GraphQL APIs, and renders an interactive cost explorer with Vue.js and Three.js.
+>>>>>>> Stashed changes
 
-This repository is a rebuilt version of the project scaffold based on the original architecture and resume description. It is intended to be pushed to GitHub and extended locally.
+This repository is a GitHub ready rebuild based on the original FrostSight architecture and resume scope. It is not the lost original repository, but it is structured to represent the same system design and technical responsibilities.
+
+## Tech Stack
+
+Frontend
+- Vue.js
+- Vite
+- Three.js
+- Axios
+
+Backend
+- Node.js
+- Express.js
+- GraphQL
+- MongoDB
+- Redis
+- AWS S3 compatible storage
+- Datadog APM, logs, and custom metrics
+
+DevOps
+- Docker
+- Docker Compose
+- GitHub Actions CI
 
 ## What FrostSight Does
 
-FrostSight monitors cloud audit activity and turns raw events into useful security and operations signals.
+FrostSight processes cloud billing line items and converts them into dashboard ready cost intelligence.
 
-Core capabilities:
-
-- Ingests audit events from a Kafka compatible stream
-- Normalizes event payloads into a consistent schema
-- Flags suspicious activity using simple rule based detection
-- Stores enriched events in Snowflake or local development storage
-- Uploads archived events to AWS S3 compatible storage
-- Emits Datadog metrics for dashboards and alerts
-- Provides a FastAPI backend for health checks, metrics, and event queries
+Core features include:
+- Billing export ingestion from CSV or JSON files
+- Raw export archival to AWS S3 compatible storage
+- Spend data persistence in MongoDB
+- REST API for dashboard summaries, anomaly alerts, and ingestion
+- GraphQL API for client driven spend retrieval and query composition
+- Redis caching for dashboard reads
+- Datadog instrumentation for API latency, ingestion volume, and cost spike alerts
+- Vue.js dashboard for spend summaries and service breakdowns
+- Three.js interactive cost explorer for visualizing service level spend intensity
 
 ## Architecture
 
 ```text
-CloudTrail or audit logs
-        ↓
-Kafka topic
-        ↓
-FrostSight worker
-        ↓
-Rule based detection
-        ↓
-Snowflake and S3 archive
-        ↓
-FastAPI backend
-        ↓
-Datadog metrics, logs, dashboards, and alerts
+Billing CSV or JSON Export
+        |
+        v
+Node.js Express Ingestion API
+        |
+        |---- raw export archived to S3
+        |---- normalized line items stored in MongoDB
+        |---- dashboard summaries cached in Redis
+        |---- custom metrics sent to Datadog
+        |
+        v
+REST and GraphQL API Layer
+        |
+        v
+Vue.js Dashboard + Three.js Cost Explorer
 ```
-
-Datadog is used as the observability layer. It tracks service health, ingestion volume, suspicious event count, API latency, pipeline failures, and processing latency. This is a normal SaaS use case because Datadog is commonly used to monitor backend services, pipelines, infrastructure, and application metrics.
-
-## Tech Stack
-
-- Python
-- FastAPI
-- Kafka compatible event streaming
-- Snowflake Snowpark Python
-- AWS S3 compatible object storage
-- Datadog custom metrics and logs
-- Docker Compose for local development
-- Pytest for tests
 
 ## Repository Layout
 
 ```text
-backend/                  FastAPI app and FrostSight services
-backend/app/api/          API routes
-backend/app/core/         Configuration and shared utilities
-backend/app/models/       Pydantic schemas
-backend/app/services/     Detection, storage, metrics, and ingestion logic
-backend/tests/            Unit tests
-infra/datadog/            Example Datadog dashboard and monitor definitions
-infra/docker/             Datadog agent example config
-scripts/                  Local run and smoke test scripts
-sample_data/              Example audit events
+FrostSight/
+  backend/
+    src/
+      config/
+      data/
+      graphql/
+      middleware/
+      routes/
+      services/
+      utils/
+    tests/
+  frontend/
+    src/
+      components/
+      services/
+      views/
+  docker-compose.yml
+  .github/workflows/ci.yml
 ```
 
-## Local Setup
+## Quick Start
 
-Create a virtual environment and install dependencies.
-
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-Copy the environment file.
-
-```bash
-cp .env.example .env
-```
-
-Run the API.
-
-```bash
-uvicorn app.main:app --reload --port 8000
-```
-
-Run the worker simulation.
-
-```bash
-python -m app.worker
-```
-
-Run tests.
-
-```bash
-pytest
-```
-
-## Docker Compose
+Run the full stack locally:
 
 ```bash
 docker compose up --build
 ```
 
-The compose file starts:
-
-- FrostSight API
-- FrostSight worker
-- Redpanda as a local Kafka compatible broker
-- Datadog agent container placeholder
-
-Datadog requires a real API key in `.env`.
-
-## Environment Variables
-
-```bash
-APP_NAME=FrostSight
-ENVIRONMENT=development
-KAFKA_BOOTSTRAP_SERVERS=localhost:9092
-KAFKA_TOPIC=frostsight.audit.events
-DATADOG_ENABLED=false
-DATADOG_API_KEY=
-DATADOG_HOST=localhost
-DATADOG_PORT=8125
-SNOWFLAKE_ENABLED=false
-S3_ENABLED=false
-AWS_REGION=us-east-1
-S3_BUCKET=frostsight-audit-archive
-```
-
-## Datadog Metrics
-
-FrostSight emits custom metrics such as:
+Backend API:
 
 ```text
-frostsight.audit.events_processed
-frostsight.audit.suspicious_events
-frostsight.pipeline.processing_latency_ms
-frostsight.pipeline.storage_failures
-frostsight.api.requests
-frostsight.api.errors
+http://localhost:4000
 ```
 
-These metrics can be placed on Datadog dashboards to monitor the SaaS backend and cloud security pipeline.
-
-## Example API Routes
+Frontend dashboard:
 
 ```text
-GET  /health
-GET  /metrics/summary
-POST /events/analyze
-GET  /events/recent
+http://localhost:5173
 ```
 
-## GitHub Push
+GraphQL endpoint:
+
+```text
+http://localhost:4000/graphql
+```
+
+## Local Development
+
+Backend:
 
 ```bash
-git init
-git add .
-git commit -m "Initial FrostSight scaffold"
-git branch -M main
-git remote add origin <your-repo-url>
-git push -u origin main
+cd backend
+npm install
+npm run dev
 ```
+
+Frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## API Examples
+
+Health check:
+
+```bash
+curl http://localhost:4000/health
+```
+
+Ingest sample billing data:
+
+```bash
+curl -X POST http://localhost:4000/api/ingest/sample
+```
+
+Get dashboard summary:
+
+```bash
+curl http://localhost:4000/api/spend/summary
+```
+
+Get alerts:
+
+```bash
+curl http://localhost:4000/api/alerts
+```
+
+GraphQL query:
+
+```graphql
+query {
+  spendSummary {
+    totalSpend
+    topService
+    lineItemCount
+  }
+  serviceSpend {
+    service
+    amount
+  }
+}
+```
+
+## Datadog Usage
+
+FrostSight includes Datadog hooks for realistic SaaS observability:
+
+- API request latency
+- API error count
+- Billing line items ingested
+- Spend anomaly count
+- Cache hit and miss count
+- Cost spike alert events
+
+In a production deployment, the Datadog Agent would run beside the backend service or as a sidecar. The backend emits application metrics through DogStatsD style calls and uses Datadog APM tracing for Express routes.
+
+## Resume Mapping
+
+This repo maps to the project bullets as follows:
+
+- Cost intelligence microservice that ingests cloud billing data and recommends cost optimizations
+- Hybrid GraphQL and HTTP REST API layer for flexible dashboard retrieval
+- Raw billing export archival through AWS S3 compatible storage
+- MongoDB backed spend querying and aggregation
+- Automated cost spike detection and alerting
+- Redis dashboard caching for faster reads
+- Vue.js and Three.js interactive cost explorer
+- Dockerized deployment with Datadog instrumentation and GitHub Actions CI

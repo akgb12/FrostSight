@@ -1,0 +1,35 @@
+{
+  "name": "frostsight-backend",
+  "version": "1.0.0",
+  "description": "Cost intelligence backend for FrostSight",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "jest --runInBand"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.705.0",
+    "@datadog/datadog-api-client": "^1.29.0",
+    "@datadog/native-metrics": "^3.1.1",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dd-trace": "^5.25.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.10.1",
+    "ioredis": "^5.4.2",
+    "mongoose": "^8.9.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "papaparse": "^5.4.1",
+    "hot-shots": "^10.2.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  }
+}
