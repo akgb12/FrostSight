@@ -1,0 +1,50 @@
+{
+  "title": "FrostSight SaaS Observability Dashboard",
+  "description": "Example dashboard for FrostSight ingestion, detection, API, and storage metrics.",
+  "widgets": [
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Audit Events Processed",
+        "requests": [
+          {
+            "q": "sum:frostsight.audit.events_processed{*}.as_count()"
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Suspicious Events",
+        "requests": [
+          {
+            "q": "sum:frostsight.audit.suspicious_events{*}.as_count()"
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "API Latency",
+        "requests": [
+          {
+            "q": "avg:frostsight.api.latency_ms{*}"
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "query_value",
+        "title": "Storage Failures",
+        "requests": [
+          {
+            "q": "sum:frostsight.pipeline.storage_failures{*}.as_count()"
+          }
+        ]
+      }
+    }
+  ]
+}
