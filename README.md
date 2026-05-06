@@ -1,5 +1,11 @@
 # FrostSight
 
+## NOTICE
+
+This is the Back Up of this Project. All commit history and version control is not on this repository. This is just an artifact of the original repository. 
+
+## Overview
+
 FrostSight is a SaaS style cloud security observability platform that ingests cloud audit events, processes suspicious activity signals, stores enriched records, and exposes operational metrics through Datadog dashboards.
 
 This repository is a rebuilt version of the project scaffold based on the original architecture and resume description. It is intended to be pushed to GitHub and extended locally.
